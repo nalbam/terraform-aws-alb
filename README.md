@@ -2,9 +2,11 @@
 
 ## usage
 ```
-module "demo-dev" {
+module "sample" {
   source = "git::https://gitlab.com/nalbam/terraform-aws-alb.git"
   region = "${var.region}"
+
+  name = "sample"
 
   vpc_id = "vpc-abcde012"
   subnets = [
