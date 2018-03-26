@@ -3,7 +3,7 @@
 ## usage
 ```
 module "sample" {
-  source = "git::https://gitlab.com/nalbam/terraform-aws-alb.git"
+  source = "git::https://github.com/nalbam/terraform-aws-alb.git"
   region = "${var.region}"
 
   name = "sample"
