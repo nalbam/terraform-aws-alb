@@ -1,0 +1,13 @@
+#
+# CircleCI 2.0
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+      - run: terraform init
+      - run: terraform validate -var-file=sample.tfvars
+      - run: terraform plan -var-file=sample.tfvars
