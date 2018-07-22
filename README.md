@@ -1,7 +1,8 @@
 # terraform-aws-alb
 
 ## usage
-```
+
+```hcl
 module "sample" {
   source = "git::https://github.com/nalbam/terraform-aws-alb.git"
   region = "${var.region}"
@@ -21,4 +22,5 @@ module "sample" {
 ```
 
 ## reference
-* https://github.com/terraform-aws-modules/terraform-aws-alb
+
+* <https://github.com/terraform-aws-modules/terraform-aws-alb>

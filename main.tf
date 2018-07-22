@@ -4,10 +4,11 @@ resource "aws_alb" "default" {
   name = "${var.name}"
 
   subnets = [
-    "${var.subnets}"
+    "${var.subnets}",
   ]
+
   security_groups = [
-    "${var.security_groups}"
+    "${var.security_groups}",
   ]
 
   internal = "${var.internal}"
@@ -36,67 +37,67 @@ resource "aws_alb" "default" {
 resource "aws_alb_target_group" "default" {
   name = "${var.name}-tg"
 
-  port = "${var.backend_port}"
-  protocol = "${upper(var.backend_protocol)}"
-  vpc_id = "${var.vpc_id}"
+  port                 = "${var.backend_port}"
+  protocol             = "${upper(var.backend_protocol)}"
+  vpc_id               = "${var.vpc_id}"
   deregistration_delay = "${var.deregistration_delay}"
 
   health_check {
-    interval = "${var.health_check_interval}"
-    path = "${var.health_check_path}"
-    port = "${var.health_check_port}"
-    healthy_threshold = "${var.health_check_healthy_threshold}"
+    interval            = "${var.health_check_interval}"
+    path                = "${var.health_check_path}"
+    port                = "${var.health_check_port}"
+    healthy_threshold   = "${var.health_check_healthy_threshold}"
     unhealthy_threshold = "${var.health_check_unhealthy_threshold}"
-    timeout = "${var.health_check_timeout}"
-    protocol = "${var.backend_protocol}"
-    matcher = "${var.health_check_matcher}"
+    timeout             = "${var.health_check_timeout}"
+    protocol            = "${var.backend_protocol}"
+    matcher             = "${var.health_check_matcher}"
   }
 
   target_type = "${var.target_type}"
 
   stickiness {
-    type = "lb_cookie"
+    type            = "lb_cookie"
     cookie_duration = "${var.cookie_duration}"
-    enabled = "${ var.cookie_duration == 1 ? false : true}"
+    enabled         = "${ var.cookie_duration == 1 ? false : true}"
   }
 
   tags = "${merge(var.tags, map("Name", "${var.name}-tg"))}"
 
   depends_on = [
-    "aws_alb.default"
+    "aws_alb.default",
   ]
 }
 
 resource "aws_alb_listener" "http" {
   load_balancer_arn = "${aws_alb.default.arn}"
-  port = "${var.http_port}"
-  protocol = "HTTP"
-  count = "${contains(var.protocols, "HTTP") ? 1 : 0}"
+  port              = "${var.http_port}"
+  protocol          = "HTTP"
+  count             = "${contains(var.protocols, "HTTP") ? 1 : 0}"
 
   default_action {
     target_group_arn = "${aws_alb_target_group.default.id}"
-    type = "forward"
+    type             = "forward"
   }
 
   depends_on = [
-    "aws_alb.default"
+    "aws_alb.default",
   ]
 }
 
 resource "aws_alb_listener" "https" {
   load_balancer_arn = "${aws_alb.default.arn}"
-  port = "${var.https_port}"
-  protocol = "HTTPS"
-  certificate_arn = "${var.certificate_arn}"
-  ssl_policy = "${var.security_policy}"
-  count = "${contains(var.protocols, "HTTPS") ? 1 : 0}"
+  port              = "${var.https_port}"
+  protocol          = "HTTPS"
+  certificate_arn   = "${var.certificate_arn}"
+  ssl_policy        = "${var.security_policy}"
+  count             = "${contains(var.protocols, "HTTPS") ? 1 : 0}"
 
   default_action {
     target_group_arn = "${aws_alb_target_group.default.id}"
-    type = "forward"
+    type             = "forward"
   }
 
   depends_on = [
-    "aws_alb.default"
+    "aws_alb.default",
   ]
 }
