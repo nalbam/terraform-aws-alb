@@ -1,6 +1,7 @@
-data "aws_availability_zones" "azs" {}
+data "aws_availability_zones" "azs" {
+}
 
-variable region {
+variable "region" {
   default = "us-east-1"
 }
 
@@ -25,7 +26,7 @@ variable "https_port" {
 
 variable "protocols" {
   description = "The protocols the ALB accepts. e.g.: ['HTTP']"
-  type        = "list"
+  type        = list(string)
 
   default = [
     "HTTP",
@@ -127,12 +128,12 @@ variable "vpc_id" {
 
 variable "subnets" {
   description = "A list of subnets to associate with the ALB. e.g. ['subnet-1a2b3c4d','subnet-1a2b3c4e','subnet-1a2b3c4f']"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "security_groups" {
   description = "The security groups with which we associate the ALB. e.g. ['sg-edcd9784','sg-edcd9785']"
-  type        = "list"
+  type        = list(string)
 }
 
 variable "security_policy" {
@@ -143,7 +144,7 @@ variable "security_policy" {
 variable "tags" {
   description = "A map of tags to add to all resources"
   default     = {}
-  type        = "map"
+  type        = map(string)
 }
 
 variable "target_type" {
